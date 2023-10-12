@@ -16,7 +16,7 @@ JAZZMIN_SETTINGS = {
     # Relative path to a favicon for your site, will default to site_logo if absent (ideally 32x32 px)
     "site_icon": None,
     # Welcome text on the login screen
-    "welcome_sign": "Welcome to GCTRADE!",
+    "welcome_sign": "GCTRADE ADMIN PANEL",
     # Copyright on the footer
     "copyright": "gctrade.uz",
     # List of model admins to search from the search bar, search bar omitted if excluded

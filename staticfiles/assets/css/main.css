@@ -22,3 +22,7 @@
     border-color: #E84618 !important;
     color: white !important;
 }
+
+#content > div > div.col-lg-9.col-12 > div > div > div > div.card-body > table > tbody > tr > td:nth-child(2) > div > a.btn.btn-xs.btn-success.addlink {
+    margin-right: 5px !important;
+}
