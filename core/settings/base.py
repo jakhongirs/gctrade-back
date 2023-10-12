@@ -35,6 +35,7 @@ CUSTOM_APPS = [
     "apps.common",
     "apps.users",
     "apps.contact_us",
+    "apps.partners",
 ]
 
 THIRD_PARTY_APPS = [
