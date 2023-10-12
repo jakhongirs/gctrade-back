@@ -32,3 +32,13 @@ if (divElement) {
     console.error('Div element not found');
 }
 
+// Select the element
+const element = document.querySelector("body > div.login-box > div.card > div > p.text-center");
+
+// Check if the element is found
+if (element) {
+    // Change the text content of the element
+    element.textContent = "Thank you! You have successfully logged in.";
+} else {
+    console.error('Element not found');
+}
