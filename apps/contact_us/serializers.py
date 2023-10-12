@@ -1,0 +1,39 @@
+from rest_framework import serializers
+
+from .models import ContactUs, EmployeeContact, Phone, SocialMedia
+
+
+class PhoneSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Phone
+        fields = ("phone",)
+
+
+class SocialMediaSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SocialMedia
+        fields = (
+            "name",
+            "url",
+        )
+
+
+class EmployeeContactSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = EmployeeContact
+        fields = (
+            "name",
+            "image",
+            "phone",
+            "email",
+            "telegram_username",
+        )
+
+
+class ContactUsSerializer(serializers.ModelSerializer):
+    phone = PhoneSerializer(many=True)
+    social_media = SocialMediaSerializer(many=True)
+
+    class Meta:
+        model = ContactUs
+        fields = ("phone", "email", "longitude", "latitude", "address", "social_media")
