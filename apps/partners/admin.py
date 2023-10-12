@@ -5,5 +5,5 @@ from .models import Partner
 
 @admin.register(Partner)
 class PartnerAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "order")
     search_fields = ("name",)
