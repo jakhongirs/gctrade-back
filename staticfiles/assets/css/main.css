@@ -12,3 +12,13 @@
 .btn {
     border-radius: 4px !important;
 }
+
+.sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active, .sidebar-light-primary .nav-sidebar > .nav-item > .nav-link.active {
+    background-color: #E84618 !important;
+}
+
+.btn-primary {
+    background-color: #E84618 !important;
+    border-color: #E84618 !important;
+    color: white !important;
+}

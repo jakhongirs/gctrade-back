@@ -21,7 +21,7 @@ JAZZMIN_SETTINGS = {
     "copyright": "gctrade.uz",
     # List of model admins to search from the search bar, search bar omitted if excluded
     # If you want to use a single search field you dont need to use a list, you can use a simple string
-    "search_model": ["users.User"],
+    "search_model": [],
     # Field name on user model that contains avatar ImageField/URLField/Charfield or a callable that receives the user
     "user_avatar": None,
     ############
@@ -55,8 +55,8 @@ JAZZMIN_SETTINGS = {
     # Custom links to append to app groups, keyed on app name
     "custom_links": {},
     "icons": {
-        "auth": "fas fa-users-cog",
-        "auth.user": "fas fa-user",
+        "users": "fas fa-users-cog",
+        "users.user": "fas fa-user",
         "auth.Group": "fas fa-users",
     },
     # Icons that are used when one is not manually specified

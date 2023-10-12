@@ -21,3 +21,14 @@ if (imgElement) {
     console.error('Image element not found');
 }
 
+// Select the <div> element
+const divElement = document.querySelector('div.float-right.d-none.d-sm-inline');
+
+// Check if the element is found
+if (divElement) {
+    // Set the display property to 'none' with !important
+    divElement.style.setProperty('display', 'none', 'important');
+} else {
+    console.error('Div element not found');
+}
+
