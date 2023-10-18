@@ -31,18 +31,15 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-CUSTOM_APPS = [
-    "apps.common",
-    "apps.users",
-    "apps.contact_us",
-    "apps.partners",
-]
+CUSTOM_APPS = ["apps.common", "apps.users", "apps.contact_us", "apps.partners", "apps.product"]
 
 THIRD_PARTY_APPS = [
     "rest_framework",
     "drf_yasg",
     "corsheaders",
     "modeltranslation",
+    "ckeditor",
+    "ckeditor_uploader",
 ]
 
 REST_FRAMEWORK = {
@@ -150,3 +147,21 @@ CELERY_TIMEZONE = "Asia/Tashkent"
 
 CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+# CKEDITOR CONFIGURATION
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_RESTRICT_BY_DATE = True
+CKEDITOR_FORCE_JPEG_COMPRESSION = True
+CKEDITOR_IMAGE_BACKEND = "pillow"
+CKEDITOR_ALLOW_NONIMAGE_FILES = True
+CKEDITOR_CONFIGS = {
+    "default": {
+        # 'skin': 'moono',
+        "toolbar": "full",
+        "height": 300,
+        "width": "100%",
+        "extraPlugins": ",".join(["image"]),
+        "extraAllowedContent": "figure figcaption",
+    },
+}

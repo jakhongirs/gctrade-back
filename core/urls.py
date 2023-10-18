@@ -6,9 +6,11 @@ from django.urls import include, path
 from .schema import swagger_urlpatterns
 
 urlpatterns = [
+    path("ckeditor/", include("ckeditor_uploader.urls")),
     path("admin/", admin.site.urls),
     path("api/v1/contact-us/", include("apps.contact_us.urls", namespace="contact_us")),
     path("api/v1/partners/", include("apps.partners.urls", namespace="partners")),
+    path("api/v1/product/", include("apps.product.urls", namespace="product")),
 ]
 
 urlpatterns += swagger_urlpatterns

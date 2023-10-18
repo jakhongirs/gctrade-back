@@ -51,7 +51,7 @@ JAZZMIN_SETTINGS = {
     # Hide these models when generating side menu (e.g auth.user)
     "hide_models": [],
     # List of apps (and/or models) to base side menu ordering off of (does not need to contain all apps/models)
-    "order_with_respect_to": ["partners", "contact_us", "users"],
+    "order_with_respect_to": ["product", "partners", "contact_us", "users"],
     # Custom links to append to app groups, keyed on app name
     "custom_links": {},
     "icons": {
@@ -63,6 +63,12 @@ JAZZMIN_SETTINGS = {
         "contact_us.Phone": "fas fa-phone",
         "contact_us.SocialMedia": "fas fa-share-alt",
         "partners.Partner": "fas fa-handshake",
+        "product.Product": "fas fa-box",
+        "product.Banner": "fas fa-images",
+        "product.Category": "fas fa-list",
+        "product.Manufacturer": "fas fa-industry",
+        "product.ProductGallery": "fas fa-images",
+        "product.ParentCategory": "fas fa-list",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",
