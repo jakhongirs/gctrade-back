@@ -1,8 +1,10 @@
-from rest_framework import generics
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics
 
-from .models import Banner, Manufacturer, ParentCategory
+from .filters import ProductFilter
+from .models import Banner, Manufacturer, ParentCategory, Product
 from .serializers import (BannerSerializer, ManufacturerSerializer,
-                          ParentCategorySerializer)
+                          ParentCategorySerializer, ProductSerializer)
 
 
 class BannerListView(generics.ListAPIView):
@@ -21,3 +23,18 @@ class ManufacturerListView(generics.ListAPIView):
 class ParentCategoryListView(generics.ListAPIView):
     queryset = ParentCategory.objects.all()
     serializer_class = ParentCategorySerializer
+
+
+class ProductListView(generics.ListAPIView):
+    """
+    Multiple manufacturer, category can be filtered by comma separated values like: manufacturer=1,2,3 or category=1,2,3
+    """
+
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filterset_class = ProductFilter
+    search_fields = ("title", "manufacturer__title", "category__title")
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True).order_by("-created_at")

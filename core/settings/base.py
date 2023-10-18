@@ -40,6 +40,7 @@ THIRD_PARTY_APPS = [
     "modeltranslation",
     "ckeditor",
     "ckeditor_uploader",
+    "django_filters",
 ]
 
 REST_FRAMEWORK = {
