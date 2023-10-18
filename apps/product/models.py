@@ -46,7 +46,9 @@ class ParentCategory(BaseModel):
 class Category(BaseModel):
     title = models.CharField(max_length=250, verbose_name=_("Title"))
     slug = models.SlugField(max_length=250, verbose_name=_("Slug"), unique=True)
-    parent = models.ForeignKey("product.ParentCategory", on_delete=models.CASCADE, verbose_name=_("Parent"))
+    parent = models.ForeignKey(
+        "product.ParentCategory", on_delete=models.CASCADE, verbose_name=_("Parent"), related_name="categories"
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
