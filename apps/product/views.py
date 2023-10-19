@@ -38,3 +38,12 @@ class ProductListView(generics.ListAPIView):
 
     def get_queryset(self):
         return Product.objects.filter(is_active=True).order_by("-created_at")
+
+
+class ProductDetailView(generics.RetrieveAPIView):
+    queryset = Product.objects.all()
+    serializer_class = ProductSerializer
+    lookup_field = "slug"
+
+    def get_queryset(self):
+        return Product.objects.filter(is_active=True)
