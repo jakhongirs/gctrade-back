@@ -2,7 +2,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 
 from .filters import ProductFilter
-from .models import Banner, Manufacturer, ParentCategory, Product
+from .models import Banner, Manufacturer, ParentCategory, Product, ProductView
 from .serializers import (BannerSerializer, ManufacturerSerializer,
                           ParentCategorySerializer, ProductSerializer)
 
@@ -45,5 +45,14 @@ class ProductDetailView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
     lookup_field = "slug"
 
-    def get_queryset(self):
+    def get_filtered_queryset(self):
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+
+        if fingerprint:
+            ProductView.objects.get_or_create(product=self.get_object(), fingerprint=fingerprint)
+
         return Product.objects.filter(is_active=True)
+
+    def get(self, request, *args, **kwargs):
+        self.queryset = self.get_filtered_queryset()
+        return super().get(request, *args, **kwargs)

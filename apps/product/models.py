@@ -95,6 +95,16 @@ class Product(BaseModel):
         verbose_name_plural = _("Products")
 
 
+class ProductView(BaseModel):
+    product = models.ForeignKey(
+        "product.Product", on_delete=models.CASCADE, verbose_name=_("Product"), related_name="views"
+    )
+    fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
+
+    def __str__(self):
+        return self.product.title
+
+
 class ProductGallery(models.Model):
     product = models.ForeignKey(
         "product.Product", on_delete=models.CASCADE, verbose_name=_("Product"), related_name="gallery"
