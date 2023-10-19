@@ -11,6 +11,7 @@ class ProductFilter(django_filters.FilterSet):
     is_recommended = django_filters.BooleanFilter(field_name="is_recommended")
     is_sale = django_filters.BooleanFilter(field_name="is_sale")
     is_active = django_filters.BooleanFilter(field_name="is_active")
+    is_most_viewed = django_filters.BooleanFilter(field_name="views_count", method="filter_most_viewed")
 
     def filter_manufacturer(self, queryset, name, value):
         manufacturers = value.split(",")
@@ -19,6 +20,11 @@ class ProductFilter(django_filters.FilterSet):
     def filter_category(self, queryset, name, value):
         categories = value.split(",")
         return queryset.filter(category__id__in=categories)
+
+    def filter_most_viewed(self, queryset, name, value):
+        if value:
+            return queryset.order_by("-views_count")
+        return queryset
 
     class Meta:
         model = Product
