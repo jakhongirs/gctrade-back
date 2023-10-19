@@ -63,6 +63,8 @@ JAZZMIN_SETTINGS = {
         "contact_us.Phone": "fas fa-phone",
         "contact_us.SocialMedia": "fas fa-share-alt",
         "partners.Partner": "fas fa-handshake",
+        "partners.Company": "fas fa-building",
+        "partners.Feedback": "fas fa-comment",
         "product.Product": "fas fa-box",
         "product.Banner": "fas fa-images",
         "product.Category": "fas fa-list",
