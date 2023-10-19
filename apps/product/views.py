@@ -34,8 +34,9 @@ class ProductListView(generics.ListAPIView):
 
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    filter_backends = (DjangoFilterBackend, filters.SearchFilter)
+    filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_class = ProductFilter
+    ordering_fields = ("price", "views_count", "created_at", "-price", "-views_count", "-created_at")
     search_fields = ("title", "manufacturer__title", "category__title")
 
     def get_queryset(self):
