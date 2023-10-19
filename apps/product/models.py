@@ -104,6 +104,10 @@ class ProductView(BaseModel):
     def __str__(self):
         return self.product.title
 
+    class Meta:
+        verbose_name = _("Product View")
+        verbose_name_plural = _("Product Views")
+
 
 class ProductGallery(models.Model):
     product = models.ForeignKey(
@@ -113,6 +117,24 @@ class ProductGallery(models.Model):
 
     def __str__(self):
         return self.product.title
+
+    class Meta:
+        verbose_name = _("Product Gallery")
+        verbose_name_plural = _("Product Galleries")
+
+
+class LastSeenProduct(BaseModel):
+    product = models.ForeignKey(
+        "product.Product", on_delete=models.CASCADE, verbose_name=_("Product"), related_name="last_seen"
+    )
+    fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
+
+    def __str__(self):
+        return self.product.title
+
+    class Meta:
+        verbose_name = _("Last Seen Product")
+        verbose_name_plural = _("Last Seen Products")
 
 
 class Banner(BaseModel):
