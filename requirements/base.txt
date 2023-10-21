@@ -10,3 +10,4 @@ django-modeltranslation==0.18.11
 Pillow==10.0.1
 django-ckeditor==6.7.0
 django-filter==23.3
+django-recaptcha==3.0.0

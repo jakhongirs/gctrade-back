@@ -41,6 +41,7 @@ THIRD_PARTY_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "django_filters",
+    "captcha"
 ]
 
 REST_FRAMEWORK = {
@@ -166,3 +167,7 @@ CKEDITOR_CONFIGS = {
         "extraAllowedContent": "figure figcaption",
     },
 }
+
+# RECAPTCHA
+RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY")
+RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY")
