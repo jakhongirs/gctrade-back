@@ -48,7 +48,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "description",
             "features",
             "price",
-            "in_stock_count",
+            "sale_price" "in_stock_count",
             "views_count",
             "is_recommended",
             "is_active",

@@ -73,6 +73,9 @@ class Product(BaseModel):
     description = RichTextUploadingField(verbose_name=_("Description"), blank=True, null=True)
     features = RichTextUploadingField(verbose_name=_("Features"), blank=True, null=True)
     price = models.DecimalField(max_digits=18, decimal_places=2, verbose_name=_("Price"), default=Decimal("0"))
+    sale_price = models.DecimalField(
+        max_digits=18, decimal_places=2, verbose_name=_("Sale Price"), blank=True, null=True
+    )
     in_stock_count = models.PositiveIntegerField(verbose_name=_("In Stock Count"), default=0)
     views_count = models.PositiveIntegerField(verbose_name=_("Views Count"), default=0)
     is_recommended = models.BooleanField(default=False, verbose_name=_("Is Recommended"))
