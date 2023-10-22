@@ -1,7 +1,8 @@
 from rest_framework import generics
 
-from .models import ContactUs, EmployeeContact
-from .serializers import ContactUsSerializer, EmployeeContactSerializer
+from .models import ContactForm, ContactUs, EmployeeContact
+from .serializers import (ContactFormSerializer, ContactUsSerializer,
+                          EmployeeContactSerializer)
 
 
 class ContactUsRetrieveView(generics.RetrieveAPIView):
@@ -15,3 +16,8 @@ class ContactUsRetrieveView(generics.RetrieveAPIView):
 class EmployeeContactListView(generics.ListAPIView):
     queryset = EmployeeContact.objects.all()
     serializer_class = EmployeeContactSerializer
+
+
+class ContactFormCreateView(generics.CreateAPIView):
+    queryset = ContactForm.objects.all()
+    serializer_class = ContactFormSerializer

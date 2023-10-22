@@ -62,6 +62,7 @@ JAZZMIN_SETTINGS = {
         "contact_us.EmployeeContact": "fas fa-address-book",
         "contact_us.Phone": "fas fa-phone",
         "contact_us.SocialMedia": "fas fa-share-alt",
+        "contact_us.ContactForm": "fas fa-file-alt",
         "partners.Partner": "fas fa-handshake",
         "partners.Company": "fas fa-building",
         "partners.Feedback": "fas fa-comment",

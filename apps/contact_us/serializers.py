@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import ContactUs, EmployeeContact, Phone, SocialMedia
+from .models import ContactForm, ContactUs, EmployeeContact, Phone, SocialMedia
 
 
 class PhoneSerializer(serializers.ModelSerializer):
@@ -37,3 +37,9 @@ class ContactUsSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactUs
         fields = ("phone", "email", "longitude", "latitude", "address", "social_media")
+
+
+class ContactFormSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactForm
+        fields = ("name", "email", "phone", "question")

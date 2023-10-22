@@ -56,3 +56,17 @@ class EmployeeContact(BaseModel):
 
     def __str__(self):
         return self.name
+
+
+class ContactForm(BaseModel):
+    name = models.CharField(_("Name"), max_length=255)
+    email = models.EmailField(_("Email"), max_length=255, null=True, blank=True)
+    phone = models.CharField(_("Phone"), max_length=255)
+    question = models.TextField(_("Question"))
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Contact Form")
+        verbose_name_plural = _("Contact Forms")
