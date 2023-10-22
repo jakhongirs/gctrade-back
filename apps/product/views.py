@@ -79,3 +79,13 @@ class LastSeenProductListView(generics.ListAPIView):
         if fingerprint:
             return LastSeenProduct.objects.filter(fingerprint=fingerprint).order_by("-created_at")
         return LastSeenProduct.objects.none()
+
+
+class ManufacturerByCategoryListView(generics.ListAPIView):
+    queryset = Manufacturer.objects.all()
+    serializer_class = ManufacturerSerializer
+    lookup_field = "category_id"
+
+    def get_queryset(self):
+        category_id = self.kwargs.get("category_id")
+        return Manufacturer.objects.filter(product__category_id=category_id).distinct()
