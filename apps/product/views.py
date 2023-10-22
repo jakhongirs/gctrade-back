@@ -3,10 +3,11 @@ from rest_framework import filters, generics
 
 from .filters import ProductFilter
 from .models import (Banner, LastSeenProduct, Manufacturer, ParentCategory,
-                     Product, ProductView)
+                     Product, ProductView, SavedProduct)
 from .serializers import (BannerSerializer, LastSeenProductSerializer,
                           ManufacturerSerializer, ParentCategorySerializer,
-                          ProductSerializer)
+                          ProductSerializer, SavedProductCreateSerializer,
+                          SavedProductSerializer)
 
 
 class BannerListView(generics.ListAPIView):
@@ -89,3 +90,23 @@ class ManufacturerByCategoryListView(generics.ListAPIView):
     def get_queryset(self):
         category_id = self.kwargs.get("category_id")
         return Manufacturer.objects.filter(product__category_id=category_id).distinct()
+
+
+class SavedProductListView(generics.ListAPIView):
+    """
+    Fingerprint is required in headers
+    """
+
+    queryset = SavedProduct.objects.all()
+    serializer_class = SavedProductSerializer
+
+    def get_queryset(self):
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+        if fingerprint:
+            return SavedProduct.objects.filter(fingerprint=fingerprint).order_by("-created_at")
+        return SavedProduct.objects.none()
+
+
+class SavedProductCreateView(generics.CreateAPIView):
+    queryset = SavedProduct.objects.all()
+    serializer_class = SavedProductCreateSerializer

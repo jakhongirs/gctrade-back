@@ -2,7 +2,8 @@ from django.urls import path
 
 from .views import (BannerListView, LastSeenProductListView,
                     ManufacturerByCategoryListView, ManufacturerListView,
-                    ParentCategoryListView, ProductDetailView, ProductListView)
+                    ParentCategoryListView, ProductDetailView, ProductListView,
+                    SavedProductCreateView, SavedProductListView)
 
 app_name = "product"
 
@@ -14,4 +15,6 @@ urlpatterns = [
     path("categories/", ParentCategoryListView.as_view(), name="categories-list"),
     path("last-seen-products/", LastSeenProductListView.as_view(), name="last-seen-products-list"),
     path("manufacturer/<int:category_id>/", ManufacturerByCategoryListView.as_view(), name="manufacturer-by-category"),
+    path("saved-products/", SavedProductListView.as_view(), name="saved-products-list"),
+    path("saved-products/create/", SavedProductCreateView.as_view(), name="saved-products-create"),
 ]

@@ -3,7 +3,7 @@ from rest_framework import serializers
 from apps.common.serializers import ImageSerializer
 
 from .models import (Banner, Category, LastSeenProduct, Manufacturer,
-                     ParentCategory, Product)
+                     ParentCategory, Product, SavedProduct)
 
 
 class BannerSerializer(serializers.ModelSerializer):
@@ -67,3 +67,17 @@ class LastSeenProductSerializer(serializers.ModelSerializer):
             "id",
             "product",
         )
+
+
+class SavedProductSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
+
+    class Meta:
+        model = SavedProduct
+        fields = ("id", "product", "fingerprint")
+
+
+class SavedProductCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SavedProduct
+        fields = ("id", "product", "fingerprint")

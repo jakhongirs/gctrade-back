@@ -140,6 +140,20 @@ class LastSeenProduct(BaseModel):
         verbose_name_plural = _("Last Seen Products")
 
 
+class SavedProduct(BaseModel):
+    product = models.ForeignKey(
+        "product.Product", on_delete=models.CASCADE, verbose_name=_("Product"), related_name="saved"
+    )
+    fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
+
+    def __str__(self):
+        return self.product.title
+
+    class Meta:
+        verbose_name = _("Saved Product")
+        verbose_name_plural = _("Saved Products")
+
+
 class Banner(BaseModel):
     title = models.CharField(max_length=250, verbose_name=_("Title"), blank=True, null=True)
     sub_title = models.CharField(max_length=250, verbose_name=_("Sub Title"), blank=True, null=True)
