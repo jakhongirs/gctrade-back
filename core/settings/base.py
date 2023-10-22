@@ -41,7 +41,7 @@ THIRD_PARTY_APPS = [
     "ckeditor",
     "ckeditor_uploader",
     "django_filters",
-    "captcha"
+    "captcha",
 ]
 
 REST_FRAMEWORK = {
@@ -169,5 +169,5 @@ CKEDITOR_CONFIGS = {
 }
 
 # RECAPTCHA
-RECAPTCHA_PRIVATE_KEY = env.str("RECAPTCHA_PRIVATE_KEY")
-RECAPTCHA_PUBLIC_KEY = env.str("RECAPTCHA_PUBLIC_KEY")
+RECAPTCHA_PRIVATE_KEY = "6Ld5-booAAAAAH4JcWSVT2CRhiH8ZiuCFsS-ONok"
+RECAPTCHA_PUBLIC_KEY = "6Ld5-booAAAAAPF3WP3T0XLl3Z1o6P17gdWPGGKO"
