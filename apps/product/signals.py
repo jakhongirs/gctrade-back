@@ -25,9 +25,14 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Order)
 def send_order_message(sender, instance, created, **kwargs):
+    message = ""
+
     if created:
-        bot_send_message("IN MODERATION")
-    if instance.status == OrderStatusChoices.SOLD:
-        bot_send_message("SOLD")
-    if instance.status == OrderStatusChoices.CANCELED:
-        bot_send_message("CANCELED")
+        message = "IN MODERATION"
+        bot_send_message(message)
+    elif instance.status == OrderStatusChoices.SOLD:
+        message = "SOLD"
+        bot_send_message(message)
+    elif instance.status == OrderStatusChoices.CANCELED:
+        message = "CANCELED"
+        bot_send_message(message)
