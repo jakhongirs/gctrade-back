@@ -31,7 +31,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
 ]
 
-CUSTOM_APPS = ["apps.common", "apps.users", "apps.contact_us", "apps.partners", "apps.product"]
+CUSTOM_APPS = ["apps.common", "apps.users", "apps.contact_us", "apps.partners", "apps.product", "apps.bot"]
 
 THIRD_PARTY_APPS = [
     "rest_framework",

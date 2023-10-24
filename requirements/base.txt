@@ -11,3 +11,5 @@ Pillow==10.0.1
 django-ckeditor==6.7.0
 django-filter==23.3
 django-recaptcha==3.0.0
+python-telegram-bot==20.6
+requests==2.31.0
