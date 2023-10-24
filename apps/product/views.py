@@ -1,5 +1,8 @@
+from django.db import models
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from apps.product.filters import ProductFilter
 from apps.product.models import (
@@ -164,3 +167,18 @@ class CartItemsListView(generics.ListAPIView):
     def get_queryset(self):
         cart_id = self.kwargs.get("cart_id")
         return CartItem.objects.filter(cart_id=cart_id).order_by("-created_at")
+
+
+class CartTotalPriceView(APIView):
+    """
+    Fingerprint is required in headers
+    """
+
+    def get(self, request, *args, **kwargs):
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+        if fingerprint:
+            cart = Cart.objects.filter(fingerprint=fingerprint).first()
+            if cart:
+                total_price = cart.items.aggregate(models.Sum("product__price")).get("product__price__sum")
+                return Response({"total_price": total_price})
+        return Response({"total_price": 0})
