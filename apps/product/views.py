@@ -116,6 +116,11 @@ class SavedProductCreateView(generics.CreateAPIView):
     serializer_class = SavedProductCreateSerializer
 
 
+class SavedProductDeleteView(generics.DestroyAPIView):
+    queryset = SavedProduct.objects.all()
+    serializer_class = SavedProductCreateSerializer
+
+
 class CartCreateView(generics.CreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer

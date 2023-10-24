@@ -5,7 +5,8 @@ from apps.product.views import (
     CartItemsListView, CartItemUpdateView, CartListView,
     LastSeenProductListView, ManufacturerByCategoryListView,
     ManufacturerListView, ParentCategoryListView, ProductDetailView,
-    ProductListView, SavedProductCreateView, SavedProductListView
+    ProductListView, SavedProductCreateView, SavedProductDeleteView,
+    SavedProductListView
 )
 
 app_name = "product"
@@ -20,6 +21,7 @@ urlpatterns = [
     path("manufacturer/<int:category_id>/", ManufacturerByCategoryListView.as_view(), name="manufacturer-by-category"),
     path("saved-products/", SavedProductListView.as_view(), name="saved-products-list"),
     path("saved-products/create/", SavedProductCreateView.as_view(), name="saved-products-create"),
+    path("saved-products/delete/<int:pk>/", SavedProductDeleteView.as_view(), name="saved-products-delete"),
     # Cart
     path("cart/create/", CartCreateView.as_view(), name="cart-create"),
     path("cart/list/", CartListView.as_view(), name="cart-detail"),
