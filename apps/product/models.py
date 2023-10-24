@@ -178,6 +178,10 @@ class Banner(BaseModel):
 class Cart(BaseModel):
     fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
 
+    @property
+    def total_price(self):
+        return self.items.aggregate(total_price=Sum(F("quantity") * F("product__price")))["total_price"]
+
     def __str__(self):
         return self.fingerprint
 
@@ -211,10 +215,6 @@ class Order(BaseModel):
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.IN_MODERATION,
     )
-
-    @property
-    def total_price(self):
-        return self.cart.items.aggregate(total_price=Sum(F("quantity") * F("product__price")))["total_price"]
 
     def __str__(self):
         return self.name

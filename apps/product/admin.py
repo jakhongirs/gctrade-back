@@ -1,8 +1,10 @@
 from django.contrib import admin
 from django.contrib.admin.options import TabularInline
 
-from .models import (Banner, Category, Manufacturer, ParentCategory, Product,
-                     ProductGallery)
+from .models import (
+    Banner, Cart, CartItem, Category, Manufacturer, Order, ParentCategory,
+    Product, ProductGallery
+)
 
 
 @admin.register(Banner)
@@ -52,3 +54,32 @@ class ProductAdmin(admin.ModelAdmin):
     autocomplete_fields = ("category", "manufacturer")
     readonly_fields = ("views_count",)
     inlines = (ProductGalleryInline,)
+
+
+class CartItemInline(admin.TabularInline):
+    model = CartItem
+    extra = 0
+
+
+@admin.register(Cart)
+class CartAdmin(admin.ModelAdmin):
+    list_display = ("fingerprint", "total_price")
+    search_fields = ("fingerprint",)
+    readonly_fields = ("created_at", "updated_at")
+    inlines = (CartItemInline,)
+
+    @admin.display(description="Total Price")
+    def total_price(self, obj):
+        return obj.total_price
+
+
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ("name", "phone", "total_price", "status")
+    search_fields = ("name", "phone")
+    list_filter = ("status",)
+    readonly_fields = ("created_at", "updated_at")
+
+    @admin.display(description="Total Price")
+    def total_price(self, obj):
+        return obj.cart.total_price

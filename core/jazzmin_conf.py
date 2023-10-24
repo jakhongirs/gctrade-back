@@ -72,6 +72,8 @@ JAZZMIN_SETTINGS = {
         "product.Manufacturer": "fas fa-industry",
         "product.ProductGallery": "fas fa-images",
         "product.ParentCategory": "fas fa-list",
+        "product.Order": "fas fa-shopping-bag",
+        "product.Cart": "fas fa-shopping-cart",
     },
     # Icons that are used when one is not manually specified
     "default_icon_parents": "fas fa-chevron-circle-right",

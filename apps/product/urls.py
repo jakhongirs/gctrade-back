@@ -4,14 +4,15 @@ from apps.product.views import (
     BannerListView, CartCreateView, CartItemCreateView, CartItemDeleteView,
     CartItemsListView, CartItemUpdateView, CartListView, CartTotalPriceView,
     LastSeenProductListView, ManufacturerByCategoryListView,
-    ManufacturerListView, ParentCategoryListView, ProductDetailView,
-    ProductListView, SavedProductCreateView, SavedProductDeleteView,
-    SavedProductListView
+    ManufacturerListView, OrderCreateView, ParentCategoryListView,
+    ProductDetailView, ProductListView, SavedProductCreateView,
+    SavedProductDeleteView, SavedProductListView
 )
 
 app_name = "product"
 
 urlpatterns = [
+    # Product
     path("list/", ProductListView.as_view(), name="products-list"),
     path("detail/<slug:slug>/", ProductDetailView.as_view(), name="products-detail"),
     path("banner/", BannerListView.as_view(), name="banner-list"),
@@ -22,7 +23,7 @@ urlpatterns = [
     path("saved-products/", SavedProductListView.as_view(), name="saved-products-list"),
     path("saved-products/create/", SavedProductCreateView.as_view(), name="saved-products-create"),
     path("saved-products/delete/<int:pk>/", SavedProductDeleteView.as_view(), name="saved-products-delete"),
-    # Cart
+    # Cart & Order
     path("cart/create/", CartCreateView.as_view(), name="cart-create"),
     path("cart/list/", CartListView.as_view(), name="cart-detail"),
     path("cart-item/create/", CartItemCreateView.as_view(), name="cart-item-create"),
@@ -30,4 +31,5 @@ urlpatterns = [
     path("cart-item/delete/<int:pk>/", CartItemDeleteView.as_view(), name="cart-item-delete"),
     path("cart-items/<int:cart_id>/", CartItemsListView.as_view(), name="cart-items-list"),
     path("cart/total-price/", CartTotalPriceView.as_view(), name="cart-total-price"),
+    path("order/create/", OrderCreateView.as_view(), name="order-create"),
 ]

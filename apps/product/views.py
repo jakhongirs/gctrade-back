@@ -1,4 +1,3 @@
-from django.db.models import F, Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework.response import Response
@@ -6,14 +5,14 @@ from rest_framework.views import APIView
 
 from apps.product.filters import ProductFilter
 from apps.product.models import (
-    Banner, Cart, CartItem, LastSeenProduct, Manufacturer, ParentCategory,
-    Product, ProductView, SavedProduct
+    Banner, Cart, CartItem, LastSeenProduct, Manufacturer, Order,
+    ParentCategory, Product, ProductView, SavedProduct
 )
 from apps.product.serializers import (
     BannerSerializer, CartItemCreateSerializer, CartItemListSerializer,
     CartSerializer, LastSeenProductSerializer, ManufacturerSerializer,
-    ParentCategorySerializer, ProductSerializer, SavedProductCreateSerializer,
-    SavedProductSerializer
+    OrderSerializer, ParentCategorySerializer, ProductSerializer,
+    SavedProductCreateSerializer, SavedProductSerializer
 )
 
 
@@ -177,7 +176,11 @@ class CartTotalPriceView(APIView):
     def get(self, request, *args, **kwargs):
         fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
         if fingerprint:
-            total_price = CartItem.objects.filter(cart__fingerprint=fingerprint).aggregate(
-                total_price=Sum(F("quantity") * F("product__price"))
-            )["total_price"]
-            return Response({"total_price": total_price})
+            cart = Cart.objects.filter(fingerprint=fingerprint).first()
+            if cart:
+                return Response({"total_price": cart.total_price})
+
+
+class OrderCreateView(generics.CreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
