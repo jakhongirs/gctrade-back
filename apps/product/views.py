@@ -1,4 +1,4 @@
-from django.db import models
+from django.db.models import F, Sum
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework.response import Response
@@ -177,8 +177,7 @@ class CartTotalPriceView(APIView):
     def get(self, request, *args, **kwargs):
         fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
         if fingerprint:
-            cart = Cart.objects.filter(fingerprint=fingerprint).first()
-            if cart:
-                total_price = cart.items.aggregate(models.Sum("product__price")).get("product__price__sum")
-                return Response({"total_price": total_price})
-        return Response({"total_price": 0})
+            total_price = CartItem.objects.filter(cart__fingerprint=fingerprint).aggregate(
+                total_price=Sum(F("quantity") * F("product__price"))
+            )["total_price"]
+            return Response({"total_price": total_price})

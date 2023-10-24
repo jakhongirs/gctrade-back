@@ -3,6 +3,7 @@ from decimal import Decimal
 from ckeditor_uploader.fields import RichTextUploadingField
 from django.core.validators import ValidationError
 from django.db import models
+from django.db.models import F, Sum
 from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
@@ -204,15 +205,16 @@ class Order(BaseModel):
     cart = models.ForeignKey("product.Cart", on_delete=models.CASCADE, verbose_name=_("Cart"), related_name="orders")
     name = models.CharField(max_length=250, verbose_name=_("Name"))
     phone = models.CharField(max_length=250, verbose_name=_("Phone"))
-    total_price = models.DecimalField(
-        max_digits=18, decimal_places=2, verbose_name=_("Total Price"), default=Decimal("0"), null=True, blank=True
-    )
     status = models.CharField(
         max_length=250,
         verbose_name=_("Status"),
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.IN_MODERATION,
     )
+
+    @property
+    def total_price(self):
+        return self.cart.items.aggregate(total_price=Sum(F("quantity") * F("product__price")))["total_price"]
 
     def __str__(self):
         return self.name

@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from apps.common.serializers import ImageSerializer
 from apps.product.models import (
-    Banner, Cart, CartItem, Category, LastSeenProduct, Manufacturer,
+    Banner, Cart, CartItem, Category, LastSeenProduct, Manufacturer, Order,
     ParentCategory, Product, SavedProduct
 )
 
@@ -102,3 +102,9 @@ class CartItemListSerializer(serializers.ModelSerializer):
     class Meta:
         model = CartItem
         fields = ("id", "cart", "product", "quantity")
+
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ("id", "cart", "name", "phone")
