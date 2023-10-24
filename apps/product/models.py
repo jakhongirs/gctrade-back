@@ -7,6 +7,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
 from apps.common.utils import generate_unique_slug
+from apps.product.choices import OrderStatusChoices
 
 
 class Manufacturer(BaseModel):
@@ -171,3 +172,51 @@ class Banner(BaseModel):
     class Meta:
         verbose_name = _("Banner")
         verbose_name_plural = _("Banners")
+
+
+class Cart(BaseModel):
+    fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
+
+    def __str__(self):
+        return self.fingerprint
+
+    class Meta:
+        verbose_name = _("Cart")
+        verbose_name_plural = _("Carts")
+
+
+class CartItem(BaseModel):
+    cart = models.ForeignKey("product.Cart", on_delete=models.CASCADE, verbose_name=_("Cart"), related_name="items")
+    product = models.ForeignKey(
+        "product.Product", on_delete=models.CASCADE, verbose_name=_("Product"), related_name="cart_items"
+    )
+    quantity = models.PositiveIntegerField(verbose_name=_("Quantity"), default=1)
+
+    def __str__(self):
+        return self.product.title
+
+    class Meta:
+        verbose_name = _("Cart Item")
+        verbose_name_plural = _("Cart Items")
+
+
+class Order(BaseModel):
+    cart = models.ForeignKey("product.Cart", on_delete=models.CASCADE, verbose_name=_("Cart"), related_name="orders")
+    name = models.CharField(max_length=250, verbose_name=_("Name"))
+    phone = models.CharField(max_length=250, verbose_name=_("Phone"))
+    total_price = models.DecimalField(
+        max_digits=18, decimal_places=2, verbose_name=_("Total Price"), default=Decimal("0"), null=True, blank=True
+    )
+    status = models.CharField(
+        max_length=250,
+        verbose_name=_("Status"),
+        choices=OrderStatusChoices.choices,
+        default=OrderStatusChoices.IN_MODERATION,
+    )
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = _("Order")
+        verbose_name_plural = _("Orders")

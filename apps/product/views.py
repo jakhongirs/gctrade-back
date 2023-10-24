@@ -1,13 +1,17 @@
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 
-from .filters import ProductFilter
-from .models import (Banner, LastSeenProduct, Manufacturer, ParentCategory,
-                     Product, ProductView, SavedProduct)
-from .serializers import (BannerSerializer, LastSeenProductSerializer,
-                          ManufacturerSerializer, ParentCategorySerializer,
-                          ProductSerializer, SavedProductCreateSerializer,
-                          SavedProductSerializer)
+from apps.product.filters import ProductFilter
+from apps.product.models import (
+    Banner, Cart, CartItem, LastSeenProduct, Manufacturer, ParentCategory,
+    Product, ProductView, SavedProduct
+)
+from apps.product.serializers import (
+    BannerSerializer, CartItemCreateSerializer, CartItemListSerializer,
+    CartSerializer, LastSeenProductSerializer, ManufacturerSerializer,
+    ParentCategorySerializer, ProductSerializer, SavedProductCreateSerializer,
+    SavedProductSerializer
+)
 
 
 class BannerListView(generics.ListAPIView):
@@ -110,3 +114,48 @@ class SavedProductListView(generics.ListAPIView):
 class SavedProductCreateView(generics.CreateAPIView):
     queryset = SavedProduct.objects.all()
     serializer_class = SavedProductCreateSerializer
+
+
+class CartCreateView(generics.CreateAPIView):
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+
+class CartListView(generics.ListAPIView):
+    """
+    Fingerprint is required in headers
+    """
+
+    queryset = Cart.objects.all()
+    serializer_class = CartSerializer
+
+    def get_queryset(self):
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+        if fingerprint:
+            return Cart.objects.filter(fingerprint=fingerprint).order_by("-created_at")
+        return Cart.objects.none()
+
+
+class CartItemCreateView(generics.CreateAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemCreateSerializer
+
+
+class CartItemUpdateView(generics.UpdateAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemCreateSerializer
+
+
+class CartItemDeleteView(generics.DestroyAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemCreateSerializer
+
+
+class CartItemsListView(generics.ListAPIView):
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemListSerializer
+    lookup_field = "cart_id"
+
+    def get_queryset(self):
+        cart_id = self.kwargs.get("cart_id")
+        return CartItem.objects.filter(cart_id=cart_id).order_by("-created_at")
