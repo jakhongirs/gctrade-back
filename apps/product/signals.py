@@ -25,23 +25,40 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
 
 @receiver(post_save, sender=Order)
 def send_order_message(sender, instance, created, **kwargs):
-    message = ""
+    message = f"""
+🏷️ Status: <b>{instance.get_status_display()}</b>
 
-    if created:
-        message = "IN MODERATION"
-        bot_send_message(message)
-    elif instance.status == OrderStatusChoices.SOLD:
-        # Check if a message for SOLD status has been sent before
-        if not Order.objects.filter(pk=instance.pk, status=OrderStatusChoices.SOLD, bot_message_sent=True).exists():
-            message = "SOLD"
+🆔 Buyurtma ID: {instance.pk}
+👤 Ism: {instance.name}
+📞 Telefon: {instance.phone}
+📅 Sana: {instance.created_at.strftime("%Y-%m-%d %H:%M")}
+
+🛒 Savatcha:
+------------------------
+"""
+
+    products = instance.cart.items.all()
+    for product in products:
+        message += f"""📦 Mahsulot: {product.product.title[:25] + '...' if len(product.product.title) > 25 else product.product.title}
+💰 Narxi: {product.product.price}
+📋 Soni: {product.quantity}
+🧾 Jami: {product.quantity * product.product.price}
+------------------------
+"""
+
+    message += f"""
+🧾 Jami: {instance.cart.total_price}
+"""
+
+    message += f"""
+📎 <a href='https://gctrade.uz/admin/product/order/{instance.pk}/change/'>Admin Panel</a>
+"""
+
+    if created or (instance.status in [OrderStatusChoices.SOLD, OrderStatusChoices.CANCELED]):
+        # Check if a message for the current status has been sent before
+        if not Order.objects.filter(pk=instance.pk, status=instance.status, bot_message_sent=True).exists():
             bot_send_message(message)
             instance.bot_message_sent = True  # Mark the message as sent
-            instance.save()
-    elif instance.status == OrderStatusChoices.CANCELED:
-        if not Order.objects.filter(pk=instance.pk, status=OrderStatusChoices.CANCELED, bot_message_sent=True).exists():
-            message = "CANCELED"
-            bot_send_message(message)
-            instance.bot_message_sent = True
             instance.save()
 
 
