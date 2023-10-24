@@ -179,6 +179,7 @@ class CartTotalPriceView(APIView):
             cart = Cart.objects.filter(fingerprint=fingerprint).first()
             if cart:
                 return Response({"total_price": cart.total_price})
+        return Response({"total_price": 0})
 
 
 class OrderCreateView(generics.CreateAPIView):
