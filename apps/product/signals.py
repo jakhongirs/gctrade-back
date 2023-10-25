@@ -26,7 +26,7 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=Order)
 def send_order_message(sender, instance, created, **kwargs):
     message = f"""
-🏷️ Status: <b>{instance.get_status_display()}</b>
+🏷️ Status: {instance.get_status_display()}
 
 🆔 Buyurtma ID: {instance.pk}
 👤 Ism: {instance.name}
@@ -35,17 +35,17 @@ def send_order_message(sender, instance, created, **kwargs):
 """
 
     message += f"""
-🧾 Jami: {instance.cart.total_price}
+🧾 Jami: {instance.cart.total_price} so'm
 """
 
     message += f"""
-📎 <a href='https://gctrade.uz/admin/product/order/{instance.pk}/change/'>Admin Panel</a>
+https://gctrade.uz/admin/product/order/{instance.pk}/change/
 """
 
     if created or (instance.status in [OrderStatusChoices.SOLD, OrderStatusChoices.CANCELED]):
         # Check if a message for the current status has been sent before
         if not Order.objects.filter(pk=instance.pk, status=instance.status, bot_message_sent=True).exists():
-            bot_send_message(message)
+            bot_send_message(message, instance.pk)
             instance.bot_message_sent = True  # Mark the message as sent
             instance.save()
 
