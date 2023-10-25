@@ -26,16 +26,16 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=Order)
 def send_order_message(sender, instance, created, **kwargs):
     message = f"""
-🏷️ Status: {instance.get_status_display()}
+🏷️ Статус: {instance.get_status_display()}
 
-🆔 Buyurtma ID: {instance.pk}
-👤 Ism: {instance.name}
-📞 Telefon: {instance.phone}
-📅 Sana: {instance.created_at.strftime("%Y-%m-%d %H:%M")}
+🆔 ID заказа: {instance.pk}
+👤 Имя: {instance.name}
+📞 Телефон: {instance.phone}
+📅 Дата: {instance.created_at.strftime("%Y-%m-%d %H:%M")}
 """
 
     message += f"""
-🧾 Jami: {instance.cart.total_price} so'm
+🧾 Итого: {instance.cart.total_price} сум
 """
 
     message += f"""

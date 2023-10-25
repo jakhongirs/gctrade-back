@@ -32,19 +32,19 @@ def create_order_excel(order):
 
     # Prepare data for Excel
     order_data = {
-        "Buyurtma ID": [order.pk],
-        "Status": [order.get_status_display()],
-        "Ism": [order.name],
-        "Telefon": [order.phone],
-        "Sana": [order.created_at.strftime("%Y-%m-%d %H:%M")],
-        "Jami": [order.cart.total_price],
+        "ID заказа": [order.pk],
+        "Статус": [order.get_status_display()],
+        "Имя": [order.name],
+        "Телефон": [order.phone],
+        "Дата": [order.created_at.strftime("%Y-%m-%d %H:%M")],
+        "Итого": [order.cart.total_price],
     }
 
     cart_data = {
-        "Mahsulot": [cart_item.product.title for cart_item in cart_items],
-        "Narxi": [cart_item.product.price for cart_item in cart_items],
-        "Soni": [cart_item.quantity for cart_item in cart_items],
-        "Jami": [cart_item.product.price * cart_item.quantity for cart_item in cart_items],
+        "Продукт": [cart_item.product.title for cart_item in cart_items],
+        "Цена": [cart_item.product.price for cart_item in cart_items],
+        "Количество": [cart_item.quantity for cart_item in cart_items],
+        "Общая стоимость": [cart_item.product.price * cart_item.quantity for cart_item in cart_items],
     }
 
     # Create DataFrames
@@ -54,8 +54,8 @@ def create_order_excel(order):
     # Save DataFrames to an Excel file
     excel_file_path = Path(__file__).resolve().parent.parent.parent / f"order_{order.pk}.xlsx"
     with pd.ExcelWriter(excel_file_path, engine="openpyxl") as writer:
-        order_df.to_excel(writer, sheet_name="Buyurtma", index=False)
-        cart_df.to_excel(writer, sheet_name="Savatcha", index=False)
+        order_df.to_excel(writer, sheet_name="Заказ", index=False)
+        cart_df.to_excel(writer, sheet_name="Корзина", index=False)
 
         # Iterate through all sheets
         for sheet in writer.sheets.values():
