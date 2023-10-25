@@ -37,6 +37,8 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(read_only=True)
     manufacturer = ManufacturerSerializer(read_only=True)
     gallery = ImageSerializer(many=True, source="get_gallery")
+    is_in_saved = serializers.SerializerMethodField()
+    is_in_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -56,7 +58,25 @@ class ProductSerializer(serializers.ModelSerializer):
             "is_active",
             "is_sale",
             "gallery",
+            "is_in_saved",
+            "is_in_cart",
         )
+
+    def get_is_in_saved(self, obj):
+        request = self.context.get("request")
+        if request:
+            fingerprint = request.headers.get("Fingerprint")
+            if fingerprint:
+                return obj.saved.filter(fingerprint=fingerprint).exists()
+        return False
+
+    def get_is_in_cart(self, obj):
+        request = self.context.get("request")
+        if request:
+            fingerprint = request.headers.get("Fingerprint")
+            if fingerprint:
+                return obj.cart_items.filter(cart__fingerprint=fingerprint).exists()
+        return False
 
 
 class LastSeenProductSerializer(serializers.ModelSerializer):
