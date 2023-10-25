@@ -32,18 +32,6 @@ def send_order_message(sender, instance, created, **kwargs):
 👤 Ism: {instance.name}
 📞 Telefon: {instance.phone}
 📅 Sana: {instance.created_at.strftime("%Y-%m-%d %H:%M")}
-
-🛒 Savatcha:
-------------------------
-"""
-
-    products = instance.cart.items.all()
-    for product in products:
-        message += f"""📦 Mahsulot: {product.product.title[:25] + '...' if len(product.product.title) > 25 else product.product.title}
-💰 Narxi: {product.product.price}
-📋 Soni: {product.quantity}
-🧾 Jami: {product.quantity * product.product.price}
-------------------------
 """
 
     message += f"""
