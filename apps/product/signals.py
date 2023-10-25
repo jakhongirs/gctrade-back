@@ -1,4 +1,4 @@
-from django.db.models.signals import post_delete, post_save
+from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
 
 from apps.bot.utils import bot_send_message
@@ -23,8 +23,8 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
     instance.product.save()
 
 
-@receiver(post_save, sender=Order)
-def send_order_message(sender, instance, created, **kwargs):
+@receiver(pre_save, sender=Order)
+def send_order_message(sender, instance, **kwargs):
     message = f"""
 🏷️ Статус: {instance.get_status_display()}
 
@@ -42,22 +42,28 @@ def send_order_message(sender, instance, created, **kwargs):
 https://gctrade.uz/admin/product/order/{instance.pk}/change/
 """
 
-    if created or (instance.status in [OrderStatusChoices.SOLD, OrderStatusChoices.CANCELED]):
-        # Check if a message for the current status has been sent before
-        if not Order.objects.filter(pk=instance.pk, status=instance.status, bot_message_sent=True).exists():
+    if instance.pk:
+        old_instance = Order.objects.get(pk=instance.pk)
+
+        if old_instance.status != instance.status:
             bot_send_message(message, instance.pk)
-            instance.bot_message_sent = True  # Mark the message as sent
-            instance.save()
 
 
 @receiver(post_save, sender=Order)
 def update_product_quantity(sender, instance, created, **kwargs):
-    if instance.status == OrderStatusChoices.SOLD:
+    if instance.status == OrderStatusChoices.SOLD and not instance.in_stock_subtracted:
         order_item = instance.cart.items.first()
         if order_item and order_item.product:
-            count = Order.objects.filter(
-                cart__items__product=order_item.product, status=OrderStatusChoices.SOLD
-            ).count()
-
-            order_item.product.in_stock_count -= count
+            order_item.product.in_stock_count -= 1
             order_item.product.save()
+
+            instance.in_stock_subtracted = True
+            instance.save()
+    elif not created and instance.status != OrderStatusChoices.SOLD and instance.in_stock_subtracted:
+        order_item = instance.cart.items.first()
+        if order_item and order_item.product:
+            order_item.product.in_stock_count += 1
+            order_item.product.save()
+
+            instance.in_stock_subtracted = False
+            instance.save()

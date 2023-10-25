@@ -215,7 +215,7 @@ class Order(BaseModel):
         choices=OrderStatusChoices.choices,
         default=OrderStatusChoices.IN_MODERATION,
     )
-    bot_message_sent = models.BooleanField(default=False, verbose_name=_("Bot Message Sent"))
+    in_stock_subtracted = models.BooleanField(default=False, verbose_name=_("In Stock Subtracted"))
 
     def __str__(self):
         return self.name
