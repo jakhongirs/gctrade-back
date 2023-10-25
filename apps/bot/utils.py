@@ -1,10 +1,8 @@
-import io
 import os
 from pathlib import Path
 
+import pandas as pd
 import requests
-from django.template.loader import get_template
-from weasyprint import HTML
 
 from apps.product.models import Order
 
@@ -16,44 +14,62 @@ def bot_send_message(message, order_id=None):
     if order_id:
         order = Order.objects.get(pk=order_id)
 
-    # Create PDF file
-    pdf_file_path = create_order_pdf(order)
+        # Create Excel file
+        excel_file_path = create_order_excel(order)
 
-    print(pdf_file_path)
+        # Send Excel file as a document to Telegram
+        files = {"document": open(excel_file_path, "rb")}
+        url = f"https://api.telegram.org/bot{token}/sendDocument"
+        params = {"chat_id": channel_id, "caption": message}
+        requests.post(url, data=params, files=files)
 
-    # Send PDF file as a document to Telegram
-    files = {"document": open(pdf_file_path, "rb")}
-    url = f"https://api.telegram.org/bot{token}/sendDocument"
-    params = {"chat_id": channel_id, "caption": message}
-    requests.post(url, data=params, files=files)
-
-    # Delete PDF file
-    os.remove(pdf_file_path)
+        # Delete Excel file
+        os.remove(excel_file_path)
 
 
-def create_order_pdf(order):
-    template = get_template("order.html")
-
+def create_order_excel(order):
     cart_items = order.cart.items.all()
 
-    for cart_item in cart_items:
-        cart_item.total_price = cart_item.quantity * cart_item.product.price
-
-    context = {
-        "order": order,
-        "cart_items": cart_items,
-        "order_status": order.get_status_display(),
-        "order_date": order.created_at.strftime("%Y-%m-%d %H:%M"),
+    # Prepare data for Excel
+    order_data = {
+        "Buyurtma ID": [order.pk],
+        "Status": [order.get_status_display()],
+        "Ism": [order.name],
+        "Telefon": [order.phone],
+        "Sana": [order.created_at.strftime("%Y-%m-%d %H:%M")],
+        "Jami": [order.cart.total_price],
     }
 
-    html = template.render(context)
-    output = io.BytesIO()
-    HTML(string=html, base_url=os.getcwd()).write_pdf(output)
+    cart_data = {
+        "Mahsulot": [cart_item.product.title for cart_item in cart_items],
+        "Narxi": [cart_item.product.price for cart_item in cart_items],
+        "Soni": [cart_item.quantity for cart_item in cart_items],
+        "Jami": [cart_item.product.price * cart_item.quantity for cart_item in cart_items],
+    }
 
-    # save file inside root directory
-    file_path = Path(__file__).resolve().parent.parent.parent / f"order_{order.pk}.pdf"
+    # Create DataFrames
+    order_df = pd.DataFrame(order_data)
+    cart_df = pd.DataFrame(cart_data)
 
-    with open(file_path, "wb") as pdf_file:
-        pdf_file.write(output.getvalue())
+    # Save DataFrames to an Excel file
+    excel_file_path = Path(__file__).resolve().parent.parent.parent / f"order_{order.pk}.xlsx"
+    with pd.ExcelWriter(excel_file_path, engine="openpyxl") as writer:
+        order_df.to_excel(writer, sheet_name="Buyurtma", index=False)
+        cart_df.to_excel(writer, sheet_name="Savatcha", index=False)
 
-    return file_path
+        # Iterate through all sheets
+        for sheet in writer.sheets.values():
+            # Iterate through all columns and set the width based on the maximum length of the content in each column
+            for column in sheet.columns:
+                max_length = 0
+                column = [cell for cell in column]
+                for cell in column:
+                    try:
+                        if len(str(cell.value)) > max_length:
+                            max_length = len(cell.value)
+                    except TypeError:
+                        pass
+                adjusted_width = (max_length + 2) * 1.2  # Adjust the width for padding and aesthetics
+                sheet.column_dimensions[column[0].column_letter].width = adjusted_width
+
+    return excel_file_path

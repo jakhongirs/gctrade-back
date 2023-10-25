@@ -1,3 +1,0 @@
-brew install pango
-
-sudo apt-get install libpangocairo-1.0-0
