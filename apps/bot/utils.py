@@ -34,8 +34,16 @@ def bot_send_message(message, order_id=None):
 def create_order_pdf(order):
     template = get_template("order.html")
 
+    cart_items = order.cart.items.all()
+
+    for cart_item in cart_items:
+        cart_item.total_price = cart_item.quantity * cart_item.product.price
+
     context = {
         "order": order,
+        "cart_items": cart_items,
+        "order_status": order.get_status_display(),
+        "order_date": order.created_at.strftime("%Y-%m-%d %H:%M"),
     }
 
     html = template.render(context)
