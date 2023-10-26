@@ -1,6 +1,7 @@
 from rest_framework import serializers
 
 from apps.common.serializers import ImageSerializer
+from apps.product.choices import OrderStatusChoices
 from apps.product.models import (
     Banner, Cart, CartItem, Category, LastSeenProduct, Manufacturer, Order,
     ParentCategory, Product, SavedProduct
@@ -39,6 +40,7 @@ class ProductSerializer(serializers.ModelSerializer):
     gallery = ImageSerializer(many=True, source="get_gallery")
     is_in_saved = serializers.SerializerMethodField()
     is_in_cart = serializers.SerializerMethodField()
+    sold_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Product
@@ -60,6 +62,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "gallery",
             "is_in_saved",
             "is_in_cart",
+            "sold_count",
         )
 
     def get_is_in_saved(self, obj):
@@ -77,6 +80,11 @@ class ProductSerializer(serializers.ModelSerializer):
             if fingerprint:
                 return obj.cart_items.filter(cart__fingerprint=fingerprint).exists()
         return False
+
+    def get_sold_count(self, obj):
+        cart = Cart.objects.filter(items__product=obj)
+        order = Order.objects.filter(cart__in=cart, status=OrderStatusChoices.SOLD)
+        return order.count()
 
 
 class LastSeenProductSerializer(serializers.ModelSerializer):
