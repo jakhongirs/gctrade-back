@@ -177,9 +177,28 @@ class CartTotalPriceView(APIView):
         fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
         if fingerprint:
             cart = Cart.objects.filter(fingerprint=fingerprint).first()
+
             if cart:
-                return Response({"total_price": cart.total_price})
-        return Response({"total_price": 0})
+                total_quantity = cart.items.count()
+                total_price = cart.total_price
+
+                # Calculate total savings from sales
+                total_savings = 0
+                for cart_item in cart.items.all():
+                    product = cart_item.product
+                    if product.sale_price is not None:
+                        savings_per_item = (product.price - product.sale_price) * cart_item.quantity
+                        total_savings += savings_per_item
+
+                return Response(
+                    {
+                        "quantity": total_quantity,
+                        "total_price": total_price,
+                        "total_savings": total_savings,
+                    }
+                )
+
+        return Response({"total_price": 0, "total_savings": 0, "quantity": 0})
 
 
 class OrderCreateView(generics.CreateAPIView):

@@ -2,6 +2,8 @@ import os
 from pathlib import Path
 
 import environ
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 from core.jazzmin_conf import *  # noqa
 
@@ -171,3 +173,9 @@ CKEDITOR_CONFIGS = {
 # RECAPTCHA
 RECAPTCHA_PRIVATE_KEY = "6Ld5-booAAAAAH4JcWSVT2CRhiH8ZiuCFsS-ONok"
 RECAPTCHA_PUBLIC_KEY = "6Ld5-booAAAAAPF3WP3T0XLl3Z1o6P17gdWPGGKO"
+
+# SENTRY
+sentry_sdk.init(
+    dsn="https://73f7c7eb95e2f07e14aba9660d5c3e93@o4505374364073984.ingest.sentry.io/4506132387594240",
+    integrations=[DjangoIntegration()],
+)
