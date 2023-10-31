@@ -11,6 +11,7 @@ class ProductFilter(django_filters.FilterSet):
     is_recommended = django_filters.BooleanFilter(field_name="is_recommended")
     is_sale = django_filters.BooleanFilter(field_name="is_sale")
     is_active = django_filters.BooleanFilter(field_name="is_active")
+    parent_category = django_filters.CharFilter(method="filter_parent_category")
 
     def filter_manufacturer(self, queryset, name, value):
         manufacturers = value.split(",")
@@ -19,6 +20,10 @@ class ProductFilter(django_filters.FilterSet):
     def filter_category(self, queryset, name, value):
         categories = value.split(",")
         return queryset.filter(category__id__in=categories)
+
+    def filter_parent_category(self, queryset, name, value):
+        parent_categories = value.split(",")
+        return queryset.filter(category__parent__id__in=parent_categories)
 
     class Meta:
         model = Product
