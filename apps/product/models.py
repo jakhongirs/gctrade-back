@@ -223,3 +223,15 @@ class Order(BaseModel):
     class Meta:
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
+
+
+class SearchHistory(BaseModel):
+    query = models.CharField(max_length=250, verbose_name=_("Query"))
+    fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
+
+    def __str__(self):
+        return self.query
+
+    class Meta:
+        verbose_name = _("Search History")
+        verbose_name_plural = _("Search Histories")

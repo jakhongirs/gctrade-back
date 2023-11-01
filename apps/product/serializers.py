@@ -4,7 +4,7 @@ from apps.common.serializers import ImageSerializer
 from apps.product.choices import OrderStatusChoices
 from apps.product.models import (
     Banner, Cart, CartItem, Category, LastSeenProduct, Manufacturer, Order,
-    ParentCategory, Product, SavedProduct
+    ParentCategory, Product, SavedProduct, SearchHistory
 )
 
 
@@ -136,3 +136,9 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = ("id", "cart", "name", "phone")
+
+
+class SearchHistorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SearchHistory
+        fields = ("id", "query", "fingerprint")

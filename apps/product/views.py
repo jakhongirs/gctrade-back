@@ -1,3 +1,4 @@
+from django.db.models import Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework.response import Response
@@ -6,13 +7,14 @@ from rest_framework.views import APIView
 from apps.product.filters import ProductFilter
 from apps.product.models import (
     Banner, Cart, CartItem, LastSeenProduct, Manufacturer, Order,
-    ParentCategory, Product, ProductView, SavedProduct
+    ParentCategory, Product, ProductView, SavedProduct, SearchHistory
 )
 from apps.product.serializers import (
     BannerSerializer, CartItemCreateSerializer, CartItemListSerializer,
     CartSerializer, LastSeenProductSerializer, ManufacturerSerializer,
     OrderSerializer, ParentCategorySerializer, ProductSerializer,
-    SavedProductCreateSerializer, SavedProductSerializer
+    SavedProductCreateSerializer, SavedProductSerializer,
+    SearchHistorySerializer
 )
 
 
@@ -204,3 +206,53 @@ class CartTotalPriceView(APIView):
 class OrderCreateView(generics.CreateAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
+
+
+class SearchHistoryCreateView(generics.CreateAPIView):
+    queryset = SearchHistory.objects.all()
+    serializer_class = SearchHistorySerializer
+
+
+class SearchHistoryListView(generics.ListAPIView):
+    """
+    Fingerprint is required in headers
+    """
+
+    queryset = SearchHistory.objects.all()
+    serializer_class = SearchHistorySerializer
+
+    def get_queryset(self):
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+        if fingerprint:
+            return SearchHistory.objects.filter(fingerprint=fingerprint).order_by("-created_at")[0:5]
+        return SearchHistory.objects.none()
+
+
+class SearchHistoryDeleteView(generics.DestroyAPIView):
+    queryset = SearchHistory.objects.all()
+    serializer_class = SearchHistorySerializer
+    lookup_field = "pk"
+
+    def delete(self, request, *args, **kwargs):
+        pk = self.kwargs.get("pk")
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+
+        if fingerprint:
+            search_history = SearchHistory.objects.filter(fingerprint=fingerprint, pk=pk).first()
+            if search_history:
+                search_history.delete()
+                return Response({"status": "deleted"})
+            return Response({"status": "not found"})
+        return Response({"status": "please provide fingerprint"})
+
+
+class PopularSearchHistoryAPIView(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            popular_searches = (
+                SearchHistory.objects.values("query").annotate(count=Count("query")).order_by("-count")[:5]
+            )
+            popular_searches_list = list(popular_searches.values("query", "count"))
+            return Response({"popular_searches": popular_searches_list})
+        except Exception as e:
+            return Response({"error": str(e)})
