@@ -3,7 +3,7 @@ from django.dispatch import receiver
 from django.utils import timezone
 
 from apps.bot.utils import bot_send_message
-from apps.product.choices import OrderStatusChoices
+from apps.product.choices import CartStatusChoices, OrderStatusChoices
 from apps.product.models import Order, ProductView
 
 
@@ -43,6 +43,9 @@ def send_order_created_message(sender, instance, created, **kwargs):
         message += f"""
 https://gctrade.uz/admin/product/order/{instance.pk}/change/
 """
+
+        instance.cart.status = CartStatusChoices.INACTIVE
+        instance.cart.save()
 
         bot_send_message(message, instance.pk)
 

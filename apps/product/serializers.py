@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from apps.common.serializers import ImageSerializer
-from apps.product.choices import OrderStatusChoices
+from apps.product.choices import CartStatusChoices, OrderStatusChoices
 from apps.product.models import (
     Banner, Cart, CartItem, Category, LastSeenProduct, Manufacturer, Order,
     ParentCategory, Product, SavedProduct, SearchHistory
@@ -78,7 +78,9 @@ class ProductSerializer(serializers.ModelSerializer):
         if request:
             fingerprint = request.headers.get("Fingerprint")
             if fingerprint:
-                return obj.cart_items.filter(cart__fingerprint=fingerprint).exists()
+                return obj.cart_items.filter(
+                    cart__fingerprint=fingerprint, cart__status=CartStatusChoices.ACTIVE
+                ).exists()
         return False
 
     def get_sold_count(self, obj):

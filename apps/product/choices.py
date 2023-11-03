@@ -6,3 +6,8 @@ class OrderStatusChoices(models.TextChoices):
     IN_MODERATION = "in_moderation", _("На модерации")
     SOLD = "sold", _("Продано")
     CANCELED = "canceled", _("Отменено")
+
+
+class CartStatusChoices(models.TextChoices):
+    ACTIVE = "active", _("Активный")
+    INACTIVE = "inactive", _("Неактивный")

@@ -8,7 +8,7 @@ from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
 from apps.common.utils import generate_unique_slug
-from apps.product.choices import OrderStatusChoices
+from apps.product.choices import CartStatusChoices, OrderStatusChoices
 
 
 class Manufacturer(BaseModel):
@@ -177,6 +177,9 @@ class Banner(BaseModel):
 
 class Cart(BaseModel):
     fingerprint = models.CharField(max_length=250, verbose_name=_("Fingerprint"))
+    status = models.CharField(
+        max_length=250, verbose_name=_("Status"), choices=CartStatusChoices.choices, default=CartStatusChoices.ACTIVE
+    )
 
     @property
     def total_price(self):
