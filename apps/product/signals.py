@@ -4,6 +4,7 @@ from django.dispatch import receiver
 from apps.bot.utils import bot_send_message
 from apps.product.choices import OrderStatusChoices
 from apps.product.models import Order, ProductView
+from django.utils import timezone
 
 
 @receiver(post_save, sender=ProductView)
@@ -31,7 +32,7 @@ def send_order_message(sender, instance, **kwargs):
 🆔 ID заказа: {instance.pk}
 👤 Имя: {instance.name}
 📞 Телефон: {instance.phone}
-📅 Дата: {instance.created_at.strftime("%Y-%m-%d %H:%M")}
+📅 Дата: {timezone.now().strftime("%d.%m.%Y %H:%M")}
 """
 
     message += f"""
