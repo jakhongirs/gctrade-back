@@ -1,4 +1,6 @@
 from django.db.models import Count
+from django.utils.decorators import method_decorator
+from django.views.decorators.cache import cache_page
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters, generics
 from rest_framework.response import Response
@@ -36,6 +38,7 @@ class ParentCategoryListView(generics.ListAPIView):
     serializer_class = ParentCategorySerializer
 
 
+@method_decorator(cache_page(60 * 10), name="dispatch")
 class ProductListView(generics.ListAPIView):
     """
     Multiple manufacturer, category can be filtered by comma separated values like: manufacturer=1,2,3 or category=1,2,3
