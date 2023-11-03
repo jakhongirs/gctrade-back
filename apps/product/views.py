@@ -49,7 +49,12 @@ class ProductListView(generics.ListAPIView):
     search_fields = ("title", "manufacturer__title", "category__title")
 
     def get_queryset(self):
-        return Product.objects.filter(is_active=True).order_by("-created_at")
+        return (
+            Product.objects.filter(is_active=True)
+            .order_by("-created_at")
+            .select_related("manufacturer", "category")
+            .prefetch_related("gallery")
+        )
 
 
 class ProductDetailView(generics.RetrieveAPIView):
