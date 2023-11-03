@@ -1,10 +1,10 @@
 from django.db.models.signals import post_delete, post_save, pre_save
 from django.dispatch import receiver
+from django.utils import timezone
 
 from apps.bot.utils import bot_send_message
 from apps.product.choices import OrderStatusChoices
 from apps.product.models import Order, ProductView
-from django.utils import timezone
 
 
 @receiver(post_save, sender=ProductView)
