@@ -24,9 +24,10 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
     instance.product.save()
 
 
-@receiver(pre_save, sender=Order)
-def send_order_message(sender, instance, **kwargs):
-    message = f"""
+@receiver(post_save, sender=Order)
+def send_order_created_message(sender, instance, created, **kwargs):
+    if created:
+        message = f"""
 🏷️ Статус: {instance.get_status_display()}
 
 🆔 ID заказа: {instance.pk}
@@ -35,18 +36,43 @@ def send_order_message(sender, instance, **kwargs):
 📅 Дата: {timezone.now().strftime("%d.%m.%Y %H:%M")}
 """
 
-    message += f"""
+        message += f"""
 🧾 Итого: {instance.cart.total_price} сум
 """
 
-    message += f"""
+        message += f"""
 https://gctrade.uz/admin/product/order/{instance.pk}/change/
 """
 
-    if instance.pk:
-        old_instance = Order.objects.get(pk=instance.pk)
+        bot_send_message(message, instance.pk)
 
+
+@receiver(pre_save, sender=Order)
+def send_order_status_changed_message(sender, instance, **kwargs):
+    try:
+        old_instance = Order.objects.get(pk=instance.pk)
+    except Order.DoesNotExist:
+        # Order is being created for the first time
+        pass
+    else:
         if old_instance.status != instance.status:
+            message = f"""
+🏷️ Новый статус: {instance.get_status_display()}
+
+🆔 ID заказа: {instance.pk}
+👤 Имя: {instance.name}
+📞 Телефон: {instance.phone}
+📅 Дата: {timezone.now().strftime("%d.%m.%Y %H:%M")}
+"""
+
+            message += f"""
+🧾 Итого: {instance.cart.total_price} сум
+"""
+
+            message += f"""
+https://gctrade.uz/admin/product/order/{instance.pk}/change/
+"""
+
             bot_send_message(message, instance.pk)
 
 
