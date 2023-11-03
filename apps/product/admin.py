@@ -63,7 +63,7 @@ class CartItemInline(admin.TabularInline):
 
 @admin.register(Cart)
 class CartAdmin(admin.ModelAdmin):
-    list_display = ("fingerprint", "total_price")
+    list_display = ("id", "fingerprint", "total_price")
     search_fields = ("fingerprint",)
     readonly_fields = ("created_at", "updated_at")
     inlines = (CartItemInline,)

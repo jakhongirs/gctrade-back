@@ -177,8 +177,10 @@ class CartTotalPriceView(APIView):
 
     def get(self, request, *args, **kwargs):
         fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+        cart_id = self.kwargs.get("cart_id")
+
         if fingerprint:
-            cart = Cart.objects.filter(fingerprint=fingerprint).first()
+            cart = Cart.objects.filter(fingerprint=fingerprint, pk=cart_id).first()
 
             if cart:
                 total_quantity = cart.items.count()
