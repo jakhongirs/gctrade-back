@@ -137,6 +137,11 @@ class OrderSerializer(serializers.ModelSerializer):
         model = Order
         fields = ("id", "cart", "name", "phone")
 
+    def validate(self, data):
+        if not data["cart"].items.all():
+            raise serializers.ValidationError("Cart should not be empty")
+        return data
+
 
 class SearchHistorySerializer(serializers.ModelSerializer):
     class Meta:
