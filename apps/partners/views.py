@@ -6,7 +6,7 @@ from .models import Feedback, Partner
 from .serializers import FeedbackSerializer, PartnerSerializer
 
 
-@method_decorator(cache_page(60 * 10), name="dispatch")
+@method_decorator(cache_page(60 * 20), name="dispatch")
 class PartnerListView(generics.ListAPIView):
     queryset = Partner.objects.all()
     serializer_class = PartnerSerializer
@@ -15,7 +15,7 @@ class PartnerListView(generics.ListAPIView):
         return Partner.objects.order_by("order")
 
 
-@method_decorator(cache_page(60 * 10), name="dispatch")
+@method_decorator(cache_page(60 * 20), name="dispatch")
 class FeedbackListView(generics.ListAPIView):
     queryset = Feedback.objects.all()
     serializer_class = FeedbackSerializer

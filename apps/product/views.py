@@ -20,6 +20,7 @@ from apps.product.serializers import (
 )
 
 
+@method_decorator(cache_page(60 * 20), name="dispatch")
 class BannerListView(generics.ListAPIView):
     queryset = Banner.objects.all()
     serializer_class = BannerSerializer
@@ -38,7 +39,6 @@ class ParentCategoryListView(generics.ListAPIView):
     serializer_class = ParentCategorySerializer
 
 
-@method_decorator(cache_page(60 * 10), name="dispatch")
 class ProductListView(generics.ListAPIView):
     """
     Multiple manufacturer, category can be filtered by comma separated values like: manufacturer=1,2,3 or category=1,2,3
