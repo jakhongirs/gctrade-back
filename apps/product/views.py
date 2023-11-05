@@ -37,6 +37,8 @@ class ManufacturerListView(generics.ListAPIView):
 class ParentCategoryListView(generics.ListAPIView):
     queryset = ParentCategory.objects.all()
     serializer_class = ParentCategorySerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_fields = ("id", "categories__id")
 
 
 class ProductListView(generics.ListAPIView):
