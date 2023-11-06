@@ -6,7 +6,7 @@ from rest_framework import filters, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from apps.product.filters import ProductFilter
+from apps.product.filters import ManufacturerFilter, ProductFilter
 from apps.product.models import (
     Banner, Cart, CartItem, LastSeenProduct, Manufacturer, Order,
     ParentCategory, Product, ProductView, SavedProduct, SearchHistory
@@ -32,6 +32,8 @@ class BannerListView(generics.ListAPIView):
 class ManufacturerListView(generics.ListAPIView):
     queryset = Manufacturer.objects.all()
     serializer_class = ManufacturerSerializer
+    filter_backends = (DjangoFilterBackend,)
+    filterset_class = ManufacturerFilter
 
 
 class ParentCategoryListView(generics.ListAPIView):
@@ -98,16 +100,6 @@ class LastSeenProductListView(generics.ListAPIView):
         if fingerprint:
             return LastSeenProduct.objects.filter(fingerprint=fingerprint).order_by("-created_at")
         return LastSeenProduct.objects.none()
-
-
-class ManufacturerByCategoryListView(generics.ListAPIView):
-    queryset = Manufacturer.objects.all()
-    serializer_class = ManufacturerSerializer
-    lookup_field = "category_id"
-
-    def get_queryset(self):
-        category_id = self.kwargs.get("category_id")
-        return Manufacturer.objects.filter(product__category_id=category_id).distinct()
 
 
 class SavedProductListView(generics.ListAPIView):

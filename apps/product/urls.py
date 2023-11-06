@@ -3,11 +3,11 @@ from django.urls import path
 from apps.product.views import (
     BannerListView, CartCreateView, CartItemCreateView, CartItemDeleteView,
     CartItemsListView, CartItemUpdateView, CartListView, CartTotalPriceView,
-    LastSeenProductListView, ManufacturerByCategoryListView,
-    ManufacturerListView, OrderCreateView, ParentCategoryListView,
-    PopularSearchHistoryAPIView, ProductDetailView, ProductListView,
-    SavedProductCreateView, SavedProductDeleteView, SavedProductListView,
-    SearchHistoryCreateView, SearchHistoryDeleteView, SearchHistoryListView
+    LastSeenProductListView, ManufacturerListView, OrderCreateView,
+    ParentCategoryListView, PopularSearchHistoryAPIView, ProductDetailView,
+    ProductListView, SavedProductCreateView, SavedProductDeleteView,
+    SavedProductListView, SearchHistoryCreateView, SearchHistoryDeleteView,
+    SearchHistoryListView
 )
 
 app_name = "product"
@@ -20,7 +20,6 @@ urlpatterns = [
     path("manufacturer/", ManufacturerListView.as_view(), name="manufacturer-list"),
     path("categories/", ParentCategoryListView.as_view(), name="categories-list"),
     path("last-seen-products/", LastSeenProductListView.as_view(), name="last-seen-products-list"),
-    path("manufacturer/<int:category_id>/", ManufacturerByCategoryListView.as_view(), name="manufacturer-by-category"),
     path("saved-products/", SavedProductListView.as_view(), name="saved-products-list"),
     path("saved-products/create/", SavedProductCreateView.as_view(), name="saved-products-create"),
     path("saved-products/delete/<int:pk>/", SavedProductDeleteView.as_view(), name="saved-products-delete"),
