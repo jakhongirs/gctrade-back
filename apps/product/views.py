@@ -125,6 +125,19 @@ class SavedProductCreateView(generics.CreateAPIView):
 class SavedProductDeleteView(generics.DestroyAPIView):
     queryset = SavedProduct.objects.all()
     serializer_class = SavedProductCreateSerializer
+    lookup_field = "product_id"
+
+    def delete(self, request, *args, **kwargs):
+        product_id = self.kwargs.get("product_id")
+        fingerprint = self.request.META.get("HTTP_FINGERPRINT", None)
+
+        if fingerprint:
+            saved_product = SavedProduct.objects.filter(fingerprint=fingerprint, product_id=product_id).first()
+            if saved_product:
+                saved_product.delete()
+                return Response({"status": "deleted"})
+            return Response({"status": "not found"})
+        return Response({"status": "please provide fingerprint"})
 
 
 class CartCreateView(generics.CreateAPIView):
