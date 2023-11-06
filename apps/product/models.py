@@ -154,6 +154,7 @@ class SavedProduct(BaseModel):
     class Meta:
         verbose_name = _("Saved Product")
         verbose_name_plural = _("Saved Products")
+        unique_together = ("product", "fingerprint")
 
 
 class Banner(BaseModel):
