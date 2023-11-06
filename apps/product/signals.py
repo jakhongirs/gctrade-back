@@ -27,6 +27,8 @@ def update_product_views_count_after_delete(sender, instance, **kwargs):
 @receiver(post_save, sender=Order)
 def send_order_created_message(sender, instance, created, **kwargs):
     if created:
+        total_price = instance.cart.total_price
+        formatted_price = f"{total_price:,.0f}".replace(",", " ").replace(".00", "") + " сум"
         message = f"""
 🏷️ Статус: {instance.get_status_display()}
 
@@ -37,7 +39,7 @@ def send_order_created_message(sender, instance, created, **kwargs):
 """
 
         message += f"""
-🧾 Итого: {instance.cart.total_price} сум
+🧾 Итого: {formatted_price}
 """
 
         message += f"""
@@ -59,6 +61,8 @@ def send_order_status_changed_message(sender, instance, **kwargs):
         pass
     else:
         if old_instance.status != instance.status:
+            total_price = instance.cart.total_price
+            formatted_price = f"{total_price:,.0f}".replace(",", " ").replace(".00", "") + " сум"
             message = f"""
 🏷️ Новый статус: {instance.get_status_display()}
 
@@ -69,7 +73,7 @@ def send_order_status_changed_message(sender, instance, **kwargs):
 """
 
             message += f"""
-🧾 Итого: {instance.cart.total_price} сум
+🧾 Итого: {formatted_price}
 """
 
             message += f"""
