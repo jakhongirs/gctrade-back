@@ -32,6 +32,7 @@ class Phone(BaseModel):
 class SocialMedia(BaseModel):
     name = models.CharField(_("Name"), max_length=255)
     url = models.URLField(_("URL"), max_length=255)
+    icon = models.FileField(_("Icon"), upload_to="social_media", null=True, blank=True)
 
     class Meta:
         verbose_name = _("Social Media")

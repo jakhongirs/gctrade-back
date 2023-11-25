@@ -17,6 +17,7 @@ class SocialMediaSerializer(serializers.ModelSerializer):
         fields = (
             "name",
             "url",
+            "icon",
         )
 
 
