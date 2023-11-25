@@ -1,7 +1,21 @@
+from ckeditor_uploader.fields import RichTextUploadingField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from apps.common.models import BaseModel
+
+
+class AboutUs(BaseModel):
+    cover = models.ImageField(_("Cover"), upload_to="about_us", null=True, blank=True)
+    title = models.CharField(_("Title"), max_length=255, null=True, blank=True)
+    description = RichTextUploadingField(_("Description"), null=True, blank=True)
+
+    class Meta:
+        verbose_name = _("About Us")
+        verbose_name_plural = _("About Us")
+
+    def __str__(self):
+        return self.title
 
 
 class Phone(BaseModel):

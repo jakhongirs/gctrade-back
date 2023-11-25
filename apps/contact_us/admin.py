@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import ContactForm, ContactUs, EmployeeContact, Phone, SocialMedia
+from .models import (
+    AboutUs, ContactForm, ContactUs, EmployeeContact, Phone, SocialMedia
+)
 
 
 @admin.register(ContactUs)
@@ -31,3 +33,9 @@ class SocialMediaAdmin(admin.ModelAdmin):
 class ContactFormAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "phone")
     search_fields = ("name", "email", "phone")
+
+
+@admin.register(AboutUs)
+class AboutUsAdmin(admin.ModelAdmin):
+    list_display = ("title",)
+    search_fields = ("title",)
