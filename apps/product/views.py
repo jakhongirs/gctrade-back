@@ -53,7 +53,7 @@ class ProductListView(generics.ListAPIView):
     filter_backends = (DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter)
     filterset_class = ProductFilter
     ordering_fields = ("price", "views_count", "created_at", "-price", "-views_count", "-created_at")
-    search_fields = ("title", "manufacturer__title", "category__title")
+    search_fields = ("title", "manufacturer__title", "category__title", "product_code")
 
     def get_queryset(self):
         return (

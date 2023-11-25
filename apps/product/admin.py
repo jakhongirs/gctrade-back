@@ -49,7 +49,7 @@ class ProductGalleryInline(TabularInline):
 class ProductAdmin(admin.ModelAdmin):
     list_display = ("title", "category", "price", "in_stock_count")
     list_filter = ("category", "manufacturer", "is_active", "is_recommended", "is_sale")
-    search_fields = ("title", "manufacturer__title", "category__title")
+    search_fields = ("title", "manufacturer__title", "category__title", "product_code")
     prepopulated_fields = {"slug": ("title",)}
     autocomplete_fields = ("category", "manufacturer")
     readonly_fields = ("views_count",)

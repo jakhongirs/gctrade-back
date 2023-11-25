@@ -71,6 +71,7 @@ class Product(BaseModel):
     )
     category = models.ForeignKey("product.Category", on_delete=models.CASCADE, verbose_name=_("Category"))
     title = models.CharField(max_length=250, verbose_name=_("Title"))
+    product_code = models.CharField(max_length=250, verbose_name=_("Product Code"), blank=True, null=True, unique=True)
     slug = models.SlugField(max_length=250, verbose_name=_("Slug"), unique=True)
     description = RichTextUploadingField(verbose_name=_("Description"), blank=True, null=True)
     features = RichTextUploadingField(verbose_name=_("Features"), blank=True, null=True)

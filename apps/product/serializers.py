@@ -63,6 +63,7 @@ class ProductSerializer(serializers.ModelSerializer):
             "is_in_saved",
             "is_in_cart",
             "sold_count",
+            "product_code",
         )
 
     def get_is_in_saved(self, obj):
