@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  
+jobs:
+  run_pull:
+    name: run pull
+    runs-on: self-hosted
+    steps:
+    - name: connect and pull
+      working-directory: ${{ secrets.WORK_DIR }}
+      run: | 
+          cd /var/www/gctrade/gctrade-back &&
+          git checkout ${{ secrets.MAIN_BRANCH }} &&
+          git pull && docker-compose up --build -d 
