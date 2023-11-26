@@ -170,7 +170,9 @@ class Banner(BaseModel):
     order = models.PositiveIntegerField(verbose_name=_("Order"), default=1)
 
     def __str__(self):
-        return self.title
+        if self.title:
+            return self.title
+        return self.order
 
     class Meta:
         verbose_name = _("Banner")
