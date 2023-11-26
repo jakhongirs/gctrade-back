@@ -8,12 +8,6 @@ from apps.product.models import (
 )
 
 
-class BannerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Banner
-        fields = ("id", "title", "sub_title", "image", "is_active", "url", "product", "order")
-
-
 class ManufacturerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Manufacturer
@@ -113,6 +107,14 @@ class SavedProductCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = SavedProduct
         fields = ("id", "product", "fingerprint")
+
+
+class BannerSerializer(serializers.ModelSerializer):
+    product = ProductSerializer(read_only=True)
+
+    class Meta:
+        model = Banner
+        fields = ("id", "title", "sub_title", "image", "is_active", "url", "product", "order")
 
 
 class CartSerializer(serializers.ModelSerializer):
