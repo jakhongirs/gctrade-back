@@ -14,7 +14,7 @@ USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
 CSRF_COOKIE_SECURE = True
-CSRF_TRUSTED_ORIGINS = ["https://gctrade.uz"]
+CSRF_TRUSTED_ORIGINS = ["https://gctrade.uz/"]
 
 ###################################################################
 # CORS
