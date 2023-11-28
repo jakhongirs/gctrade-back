@@ -17,7 +17,6 @@ CSRF_TRUSTED_ORIGINS = ["https://gctrade.uz"]
 CORS_ORIGIN_WHITELIST = [
     "https://gctrade.uz",
 ]
-CSRF_COOKIE_SAMESITE = 'None'
 CSRF_COOKIE_SECURE = True
 
 ###################################################################
